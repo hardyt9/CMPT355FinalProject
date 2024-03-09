@@ -79,9 +79,6 @@ class ApplesToApples():
                         p.associate_correlation(green_card, [card])                                 #associate the correlation of the player's hand to the green card
         return red_cards                                                                            #return the dictionary of red cards
 
-    
-   
-    
     # the judge picks the winning red card
     def pick_winner(self, red_cards):
         return random.choice(list(red_cards.keys()))
