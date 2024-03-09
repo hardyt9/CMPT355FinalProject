@@ -1,44 +1,6 @@
 import random
-from difflib import SequenceMatcher
+from .player import Player
 
-# create a player class for Apples to Apples which has a name and a hand of red cards and a score checks for AI players and associates correlation
-class Player:
-    def __init__(self, name, is_ai=False):
-        self.name = name        #name of the player
-        self.hand = []          #list of red cards in the player's hand
-        self.score = 0          #score of the player
-        self.is_ai = is_ai      #check if the player is an AI
-        self.correlation = {}   #correlation of the player's hand to the green card
-
-    def add_card_to_hand(self, card):
-        self.hand.append(card)
-
-    def associate_correlation(self, green_card, red_cards):
-        if self.is_ai:
-            if green_card not in self.correlation:
-                self.correlation[green_card] = {'Perfect Match': [], 'High Match': [], 'Low Match': []}
-            for card in red_cards:
-                similarity = self.calculate_similarity(card, green_card)
-                if similarity == 1:
-                    self.correlation[green_card]['Perfect Match'].append(card)
-                elif similarity >= 0.7:
-                    self.correlation[green_card]['High Match'].append(card)
-                elif similarity >= 0.5:
-                    self.correlation[green_card]['Low Match'].append(card)
-
-    def play_red_card(self, green_card):
-        if self.is_ai:
-            best_match = None
-            best_similarity = 0
-            for card in self.hand:
-                similarity = self.calculate_similarity(card, green_card)
-                if similarity > best_similarity:
-                    best_similarity = similarity
-                    best_match = card
-            return best_match
-
-    def calculate_similarity(self, card1, card2):
-        return SequenceMatcher(None, card1, card2).ratio()
 
 #------------------------------------------------------------------------------------------------      
 #create a game class for Apples to Apples with the list of players
@@ -117,9 +79,6 @@ class ApplesToApples():
                         p.associate_correlation(green_card, [card])                                 #associate the correlation of the player's hand to the green card
         return red_cards                                                                            #return the dictionary of red cards
 
-    
-   
-    
     # the judge picks the winning red card
     def pick_winner(self, red_cards):
         return random.choice(list(red_cards.keys()))
@@ -128,31 +87,3 @@ class ApplesToApples():
     def game_over(self):
         # check to see if any player has 4 points
         return any(player.score == 4 for player in self.players)
-
-    
-#------------------------------------------------------------------------------------------------
-# set up the game, create data for the green deck and the red deck 
-# generate a list of adjectives and a list of nouns for game play from imported text files
-def main():
-    # from the text files, create the red and green decks
-    filename1 = "red_deck.txt"
-    filename2 = "green_deck.txt"
-    red_deck = []
-    green_deck = []
-    with open(filename1, 'r') as file:
-        for line in file:
-            red_deck.append(line.strip())
-
-    with open(filename2, 'r') as file:
-        for line in file:
-            green_deck.append(line.strip())
-    
-    # create a list of players
-    players = ["Tyler", "Darion", "Aiden", "Malcom", "AI"]
-    # create an instance of the game
-    game = ApplesToApples(players, red_deck, green_deck)
-    # start the game
-    game.start_game()
-#------------------------------------------------------------------------------------------------
-if __name__ == "__main__":
-    main()
