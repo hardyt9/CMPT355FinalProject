@@ -1,24 +1,16 @@
-from game import ApplesToApples
+from game import ApplesToApples, Deck
 
 #------------------------------------------------------------------------------------------------
 # set up the game, create data for the green deck and the red deck 
 # generate a list of adjectives and a list of nouns for game play from imported text files
 def main():
-    # from the text files, create the red and green decks
-    filename1 = "red_deck.txt"
-    filename2 = "green_deck.txt"
-    red_deck = []
-    green_deck = []
-    with open(filename1, 'r') as file:
-        for line in file:
-            red_deck.append(line.strip())
-
-    with open(filename2, 'r') as file:
-        for line in file:
-            green_deck.append(line.strip())
-    
     # create a list of players
     players = ["Tyler", "Darion", "Aiden", "Malcom", "AI"]
+
+    # create instances of Decks (red/green)
+    red_deck = Deck("red_deck.txt")
+    green_deck = Deck("green_deck.txt")
+
     # create an instance of the game
     game = ApplesToApples(players, red_deck, green_deck)
     # start the game

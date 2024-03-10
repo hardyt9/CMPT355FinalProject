@@ -1,5 +1,6 @@
 import random
 from .player import Player
+from .deck import Deck
 
 
 #------------------------------------------------------------------------------------------------      
@@ -13,8 +14,8 @@ class ApplesToApples():
         self.green_deck = green_deck                      #list of green cards
 
         # shuffle decks
-        random.shuffle(self.red_deck) #shuffle the red deck
-        random.shuffle(self.green_deck) #shuffle the green deck
+        self.red_deck.shuffle() #shuffle the red deck
+        self.green_deck.shuffle() #shuffle the green deck
         
         # who ever is the first judge will be randomly chosen
         self.current_judge_index = random.randint(0, len(self.players)-1) #randomly choose the first judge
@@ -25,8 +26,8 @@ class ApplesToApples():
     def deal_hands(self):
         for player in self.players: #for each player in the game
             # Randomly create the player's hand by drawing 7 cards from the red deck
-            for i in range(7):
-                card = self.red_deck.pop(0) #remove the card from the red deck
+            for _ in range(7):
+                card = self.red_deck.draw_card() #remove the card from the red deck
                 player.hand.append(card) #add the card to the player's hand
 
     # Executes the game while it is not over calls pick and play a round
@@ -37,9 +38,9 @@ class ApplesToApples():
     def pick_and_play_round(self):
         current_judge = self.players[self.current_judge_index]                          #current judge is the player at the current judge index
         print(f"\nJudge: {current_judge.name}")                                         #print the current judge's name
-        green_card = self.pick_green_card()                                             #pick the top green card from the shuffled deck
+        green_card = self.green_deck.draw_card()                                        #pick the top green card from the shuffled deck
         print(f"Green card picked: {green_card}")                                       #print the green card picked  
-        red_cards = self.pick_red_cards()                                               #Players pick one red card each
+        red_cards = self.pick_red_cards(green_card)                                               #Players pick one red card each
         print("Red cards picked by other players (in random order):")                   #print the red cards picked by other players
         for name, card in red_cards.items():                                            #for each player and their red card
             print(f"{name}: {card}")                                                    #print the player's name and their red card
@@ -53,15 +54,10 @@ class ApplesToApples():
                     print(f"{player.name} has won the game!")                           #print the player's name and that they have won the game
                     return                                                              #end the game
         self.current_judge_index = (self.current_judge_index + 1) % len(self.players)   #change the judge to the next player in the list (moves to the next player in the list)
-
-    # pick the top green card from the shuffled deck
-    def pick_green_card(self):
-        return self.green_deck.pop(0)
     
     # Players pick one red card each
-    def pick_red_cards(self):                                                                       #Players pick one red card each
+    def pick_red_cards(self, green_card):                                                           #Players pick one red card each
         red_cards = {}                                                                              #create a dictionary for the red cards                        
-        green_card = self.green_deck[0]                                                             # Get the current round's green card   
         print(f"\nGreen card for this round: {green_card}")                                         #print the green card for this round
     
         for i, player in enumerate(self.players):                                                   #for each player in the game
