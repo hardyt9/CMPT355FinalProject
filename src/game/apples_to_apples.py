@@ -69,6 +69,7 @@ class ApplesToApples():
                     print("Your hand:", player.hand)                                                #print the player's hand
                     card_index = int(input("Enter the index of the red card you want to play: "))   #prompt the player to enter the index of the red card they want to play
                     card = player.hand.pop(card_index)                                              #remove the card from the player's hand
+                    player.hand.append(self.red_deck.draw_card())
                 red_cards[player.name] = card                                                       #add the player's name and their red card to the dictionary
                 for p in self.players:                                                              #for each player in the game
                     if p != player:                                                                 #if the player is not the current player
