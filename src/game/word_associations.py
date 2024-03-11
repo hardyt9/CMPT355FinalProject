@@ -1,6 +1,10 @@
 import spacy
 from collections import defaultdict
- 
+
+#This file contains functions related to using Spacy for natural language
+#processing in order to find word associations
+
+#Get words from file supplied
 def read_words_from_file(file_path):
     with open(file_path, 'r') as file:
         words = file.read().splitlines()
