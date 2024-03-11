@@ -4,6 +4,9 @@ from collections import defaultdict
 #This file contains functions related to using Spacy for natural language
 #processing in order to find word associations
 
+#Ensure that "python -m spacy download en_core_web_md" has been used before
+#running this file
+
 #Get words from file supplied
 def read_words_from_file(file_path):
     with open(file_path, 'r') as file:
