@@ -61,3 +61,32 @@ def get_noun_associations(noun, which='all'):
             associations[adjective][noun] = similarity
 
     return associations
+
+'''
+Calculate all possible associations between nouns and adjectives.
+If both arguments are None, then all words from list are compared.
+NOTE: If the above condition occurs, this will take a very long time.
+Otherwise, calculate associations between the supplied nouns and adjectives.
+Both should be lists of strings if supplied.
+'''
+def get_all_associations(nouns=None, adjectives=None):
+
+    nlp = spacy.load("en_core_web_md")
+
+    associations = defaultdict(dict)
+
+    #if nouns is none, then get all nouns from file
+    if nouns is None:
+        nouns = read_words_from_file('../red_deck.txt')
+
+    #if adjectives is none, then get all adjectives from file
+    if adjectives is None:
+        adjectives = read_words_from_file('../green_deck.txt')
+
+    #check similarties between adjectives and nouns
+    for adjective in adjectives:
+        for noun in nouns:
+            similarity = nlp(adjective).similarity(nlp(noun))
+            associations[adjective][noun] = similarity
+
+    return associations
