@@ -17,6 +17,8 @@ def read_words_from_file(file_path):
 calculate associations between given adjective and specified nouns.
 If which not supplied, defaults to all possible nouns.
 Which should be a list of strings if supplied.
+RETURN: dictionary with adjectives as keys. Each key then has a dictionary
+with nouns as keys with their similarity values.
 '''
 def get_adj_associations(adjective, which='all'):
 
@@ -45,6 +47,8 @@ def get_adj_associations(adjective, which='all'):
 calculate associations between given noun and specified adjectives.
 If which not supplied, defaults to all possible adjectives.
 Which should be a list of strings if supplied.
+RETURN: dictionary with adjectives as keys. Each key then has a dictionary
+with nouns as keys with their similarity values.
 '''
 def get_noun_associations(noun, which='all'):
 
@@ -75,6 +79,8 @@ If both arguments are None, then all words from list are compared.
 NOTE: If the above condition occurs, this will take a very long time.
 Otherwise, calculate associations between the supplied nouns and adjectives.
 Both should be lists of strings if supplied.
+RETURN: dictionary with adjectives as keys. Each key then has a dictionary
+with nouns as keys with their similarity values.
 '''
 def get_all_associations(nouns=None, adjectives=None):
 
