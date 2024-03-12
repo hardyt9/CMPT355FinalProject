@@ -1,6 +1,7 @@
 import random
 from .player import Player
 from .deck import Deck
+from .word_associations import get_adj_associations, get_noun_associations
 
 
 #------------------------------------------------------------------------------------------------      
@@ -36,50 +37,91 @@ class ApplesToApples():
             self.pick_and_play_round()
 
     def pick_and_play_round(self):
-        current_judge = self.players[self.current_judge_index]                          #current judge is the player at the current judge index
-        print(f"\nJudge: {current_judge.name}")                                         #print the current judge's name
-        green_card = self.green_deck.draw_card()                                        #pick the top green card from the shuffled deck
-        print(f"Green card picked: {green_card}")                                       #print the green card picked  
-        red_cards = self.pick_red_cards(green_card)                                               #Players pick one red card each
-        print("Red cards picked by other players (in random order):")                   #print the red cards picked by other players
-        for name, card in red_cards.items():                                            #for each player and their red card
-            print(f"{name}: {card}")                                                    #print the player's name and their red card
-        winner_name = self.pick_winner(red_cards)                                       #the judge picks the winning red card
-        print(f"Winner: {winner_name}")                                                 #print the winner's name
-        for player in self.players:                                                     #for each player in the game
-            if player.name == winner_name:                                              #if the player's name is the winner's name
-                player.score += 1                                                       #add 1 to the player's score
-                print(f"{player.name} won the round and has {player.score} points.")    #print the player's name and their score
-                if player.score == 4:                                                   #if the player's score is 4
-                    print(f"{player.name} has won the game!")                           #print the player's name and that they have won the game
-                    return                                                              #end the game
-        self.current_judge_index = (self.current_judge_index + 1) % len(self.players)   #change the judge to the next player in the list (moves to the next player in the list)
+        #current judge is the player at the current judge index
+        current_judge = self.players[self.current_judge_index]  
+        #print the current judge's name                        
+        print(f"\nJudge: {current_judge.name}")  
+        #pick the top green card from the shuffled deck                                       
+        green_card = self.green_deck.draw_card()  
+        #print the green card picked by the judge
+        print(f"Green card picked: {green_card}")  
+        #Players pick one red card each                                     
+        red_cards = self.pick_red_cards(green_card)     
+        #print the red cards picked by other players                                          
+        print("Red cards picked by other players:")   
+        #for each player and their red card                
+        for name, card in red_cards.items(): 
+            #print the player's name and their red card                                           
+            print(f"{name}: {card}")  
+        #the judge picks the winning red card                                                 
+        winner_name = self.pick_winner(red_cards,green_card)    
+        #print the winner's name                                  
+        print(f"Winner: {winner_name}")   
+         #for each player in the game                                              
+        for player in self.players: 
+            #if the player's name is the winner's name                                                   
+            if player.name == winner_name:    
+                #add 1 to the player's score                                          
+                player.score += 1  
+                #print the player's name and their score                                                     
+                print(f"{player.name} won the round and has {player.score} point(s).") 
+                #if the player's score is 4  
+                if player.score == 4:        
+                    #print the player's name and that they have won the game                                          
+                    print(f"{player.name} has won the game!")    
+                     #end the game                      
+                    return        
+        #change the judge to the next player in the list (moves to the next player in the list)                                                     
+        self.current_judge_index = (self.current_judge_index + 1) % len(self.players)   
     
     # Players pick one red card each
-    def pick_red_cards(self, green_card):                                                           #Players pick one red card each
-        red_cards = {}                                                                              #create a dictionary for the red cards                        
-        print(f"\nGreen card for this round: {green_card}")                                         #print the green card for this round
-    
-        for i, player in enumerate(self.players):                                                   #for each player in the game
-            if i != self.current_judge_index:                                                       #if the player is not the judge
-                if player.name == "AI":                                                             #if the player is an AI
-                    card = player.play_red_card(green_card)                                         #play the best red card
-                else:                                                                               # if the player is not an AI
-                    print(f"\n{player.name}, it's your turn.")                                      #prompt the player to pick a red card
-                    print("Your hand:", player.hand)                                                #print the player's hand
-                    card_index = int(input("Enter the index of the red card you want to play: "))   #prompt the player to enter the index of the red card they want to play
-                    card = player.hand.pop(card_index)                                              #remove the card from the player's hand
+    def pick_red_cards(self, green_card):    
+        #create a dictionary for the red cards picked by the players
+        red_cards = {}                                         
+        #for each player in the game
+        for i, player in enumerate(self.players): 
+            #if the player is not the judge                                                  
+            if i != self.current_judge_index:
+                #if the player is an AI                                                   
+                if player.name == "AI": 
+                    #get the assoicaitons of the green card to all red cards in the player's hand using API                                                            
+                    card = player.play_red_card(green_card)
+                    #append name and card to dictionary of red cards picked by the players and by the AI
+                    red_cards[player.name] = card
+
+                #if player is human                                       
+                else:  
+                    #prompt the player to pick a red card from their hand                                                                            
+                    print(f"\n{player.name}, it's your turn.")  
+                    print("")
+                    #print the player's hand                                    
+                    print("Your hand:", player.hand) 
+                    #prompt the player to enter the index of the red card they want to play                                              
+                    card_index = int(input("Enter the index of the red card you want to play: ")) 
+                    print("")
+                    #remove the card from the player's hand and add a new card from the red deck to the player's hand  
+                    card = player.hand.pop(card_index)                                           
                     player.hand.append(self.red_deck.draw_card())
-                red_cards[player.name] = card                                                       #add the player's name and their red card to the dictionary
-                for p in self.players:                                                              #for each player in the game
-                    if p != player:                                                                 #if the player is not the current player
-                        p.associate_correlation(green_card, [card])                                 #associate the correlation of the player's hand to the green card
-        return red_cards                                                                            #return the dictionary of red cards
+                    #add the player's name and the card they picked to the dictionary of red cards picked by the players and by the AI
+                    red_cards[player.name] = card 
+        #return the dictionary of red cards picked by the players and by the AI                                                                                                       
+        return red_cards                                                                            
 
-    # the judge picks the winning red card
-    def pick_winner(self, red_cards):
-        return random.choice(list(red_cards.keys()))
-
+    # the judge picks the winning red card by examining the red cards picked by the players and choosing the highest association
+    def pick_winner(self, red_cards, green_card):
+        #use get adj associations to get the association of the green card to the red card chosen by the players for the round
+        associations = get_adj_associations(green_card, red_cards)
+        #loop through the assoication dictionary and find the red card with the highest association to the green card (value)
+        # format of dictionary is {adjective: {noun: similarity}}
+        for i in associations:
+            for j in associations[i]:
+                if associations[i][j] == max(associations[i].values()):
+                    winner = j
+        #return the name of the player who picked the winning red card
+        return winner
+            
+                
+            
     # create a method to check if the game is over
     def game_over(self):
         # check to see if any player has 4 points
