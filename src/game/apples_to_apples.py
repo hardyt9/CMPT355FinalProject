@@ -36,41 +36,48 @@ class ApplesToApples():
         while not self.game_over():
             self.pick_and_play_round()
 
+    '''
+    #print the current judge's name
+    #pick the top green card from the shuffled deck
+    #print the green card picked by the judge
+    #print the red cards picked by other players
+    #for each player and their red card
+    #print the player's name and their red card
+    #print the winner's name
+    #for each player in the game
+    #if the player's name is the winner's name
+    #add 1 to the player's score
+    #print the player's name and their score
+    #if the player's score is 4
+    #print the player's name and that they have won the game
+    #end the game
+    '''
     def pick_and_play_round(self):
         #current judge is the player at the current judge index
-        current_judge = self.players[self.current_judge_index]  
-        #print the current judge's name                        
+        current_judge = self.players[self.current_judge_index]                         
         print(f"\nJudge: {current_judge.name}")  
-        #pick the top green card from the shuffled deck                                       
+                                      
         green_card = self.green_deck.draw_card()  
-        #print the green card picked by the judge
-        print(f"Green card picked: {green_card}")  
+        print(f"Green card drawn: {green_card}") 
+
         #Players pick one red card each                                     
-        red_cards = self.pick_red_cards(green_card)     
-        #print the red cards picked by other players                                          
-        print("Red cards picked by other players:")   
-        #for each player and their red card                
-        for name, card in red_cards.items(): 
-            #print the player's name and their red card                                           
+        red_cards = self.pick_red_cards(green_card)            
+        print("Red cards picked by other players:")                  
+        for name, card in red_cards.items():                                            
             print(f"{name}: {card}")  
+
         #the judge picks the winning red card                                                 
-        winner_name = self.pick_winner(red_cards,green_card)    
-        #print the winner's name                                  
+        winner_name = self.pick_winner(red_cards,green_card)                             
         print(f"Winner: {winner_name}")   
-         #for each player in the game                                              
-        for player in self.players: 
-            #if the player's name is the winner's name                                                   
-            if player.name == winner_name:    
-                #add 1 to the player's score                                          
-                player.score += 1  
-                #print the player's name and their score                                                     
+                                              
+        for player in self.players:                                                    
+            if player.name == winner_name:                                              
+                player.score += 1                                         
                 print(f"{player.name} won the round and has {player.score} point(s).") 
-                #if the player's score is 4  
-                if player.score == 4:        
-                    #print the player's name and that they have won the game                                          
-                    print(f"{player.name} has won the game!")    
-                     #end the game                      
-                    return        
+                if player.score == 4:                                                  
+                    print(f"{player.name} has won the game!")                          
+                    return     
+
         #change the judge to the next player in the list (moves to the next player in the list)                                                     
         self.current_judge_index = (self.current_judge_index + 1) % len(self.players)   
     
