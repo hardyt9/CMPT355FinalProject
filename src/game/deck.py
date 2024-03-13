@@ -1,6 +1,12 @@
 import random
 
+'''
+TODO Documentation
+'''
 class Deck():
+    '''
+    TODO Documentation
+    '''
     def __init__(self, filename):
         self.cards = []
         self.size = 0
@@ -11,9 +17,15 @@ class Deck():
                 self.cards.append(line.strip())
                 self.size += 1
 
+    '''
+    TODO Documentation
+    '''
     def shuffle(self):
         random.shuffle(self.cards)
 
+    '''
+    TODO Documentation
+    '''
     def draw_card(self):
         self.size -= 1
         return self.cards.pop(0)

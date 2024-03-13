@@ -4,10 +4,15 @@ from .deck import Deck
 from .word_associations import get_adj_associations, get_noun_associations
 
 
-#------------------------------------------------------------------------------------------------      
+'''
+TODO Documentation
 #create a game class for Apples to Apples with the list of players
+'''
 class ApplesToApples():
+    '''
+    TODO Documentation
     #initialize the game with four to ten players from inputed list of players and the red and green decks
+    '''
     def __init__(self, players, red_deck, green_deck):
         #initialize the list of players and the red and green decks
         self.players = [Player(name) for name in players] #create a list of player instances with name and empty hand
@@ -23,7 +28,10 @@ class ApplesToApples():
         # deal hands to players
         self.deal_hands()
     
+    '''
+    TODO Documentation
     # randomly pick 7 red cards from red deck to give to each player in the game
+    '''
     def deal_hands(self):
         for player in self.players: #for each player in the game
             # Randomly create the player's hand by drawing 7 cards from the red deck
@@ -31,12 +39,16 @@ class ApplesToApples():
                 card = self.red_deck.draw_card() #remove the card from the red deck
                 player.hand.append(card) #add the card to the player's hand
 
+    '''
+    TODO Documentation
     # Executes the game while it is not over calls pick and play a round
+    '''
     def start_game(self):
         while not self.game_over():
             self.pick_and_play_round()
 
     '''
+    TODO Documentation
     #print the current judge's name
     #pick the top green card from the shuffled deck
     #print the green card picked by the judge
@@ -81,7 +93,10 @@ class ApplesToApples():
         #change the judge to the next player in the list (moves to the next player in the list)                                                     
         self.current_judge_index = (self.current_judge_index + 1) % len(self.players)   
     
+    '''
+    TODO Documentation
     # Players pick one red card each
+    '''
     def pick_red_cards(self, green_card):    
         #create a dictionary for the red cards picked by the players
         red_cards = {}                                         
@@ -114,7 +129,10 @@ class ApplesToApples():
         #return the dictionary of red cards picked by the players and by the AI                                                                                                       
         return red_cards                                                                            
 
+    '''
+    TODO Documentation
     # the judge picks the winning red card by examining the red cards picked by the players and choosing the highest association
+    '''
     def pick_winner(self, red_cards, green_card):
         #use get adj associations to get the association of the green card to the red card chosen by the players for the round
         associations = get_adj_associations(green_card, red_cards)
@@ -126,10 +144,11 @@ class ApplesToApples():
                     winner = j
         #return the name of the player who picked the winning red card
         return winner
-            
-                
-            
+
+    '''
+    TODO Documentation 
     # create a method to check if the game is over
+    '''
     def game_over(self):
         # check to see if any player has 4 points
         return any(player.score == 4 for player in self.players)
