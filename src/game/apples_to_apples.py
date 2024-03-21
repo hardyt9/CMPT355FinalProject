@@ -1,5 +1,5 @@
 import random
-from .player import Player
+from .player_OLD import Player
 from .deck import Deck
 
 
