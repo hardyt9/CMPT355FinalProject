@@ -82,7 +82,7 @@ Both should be lists of strings if supplied.
 RETURN: dictionary with adjectives as keys. Each key then has a dictionary
 with nouns as keys with their similarity values.
 '''
-def get_all_associations(nouns=None, adjectives=None):
+def get_all_associations(nouns=None, adjectives=None, judge = None):
 
     nlp = spacy.load("en_core_web_md")
 
@@ -100,6 +100,8 @@ def get_all_associations(nouns=None, adjectives=None):
     for adjective in adjectives:
         for noun in nouns:
             similarity = nlp(adjective).similarity(nlp(noun))
+            if judge == "Contrarion":
+                similarity = -similarity
             associations[adjective][noun] = similarity
 
     return associations
